@@ -27,8 +27,18 @@ app.post("/api/data", (req, res) => {
     },
     body: JSON.stringify(req.body),
   };
-  request(options).pipe(res);
+  request(options, (error, response, body) => {
+    if (error) {
+      res.status(500).send(error);
+      return;
+    }
+    res.set('Access-Control-Allow-Origin', '*');
+    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-cybozu-api-token');
+    res.send(body);
+  });
 });
+
 
 // サーバーを起動
 const port = process.env.PORT || 3000;
