@@ -57,8 +57,8 @@ app.post("/api/data", (req, res) => {
 });
 
 
-// サーバーを起動
-// const port = 3002;
-// app.listen(port, () => {
-//   console.log(`Server is running on http://localhost:${port}`);
-// });
+サーバーを起動
+const port = process.env.port || 3002;
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
+});
