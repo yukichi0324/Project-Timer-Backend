@@ -29,19 +29,36 @@ app.post("/api/data", (req, res) => {
   };
   request(options, (error, response, body) => {
     if (error) {
-      res.status(500).send(error);
-      return;
+      console.error('Request Error:', error); // エラーをログ出力
+      return res
+        .status(500)
+        .json({ message: "Internal server error", details: error.message });
     }
-    res.set('Access-Control-Allow-Origin', '*');
-    res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
-    res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, x-cybozu-api-token');
-    res.send(body);
+
+    console.log('Response Status Code:', response.statusCode); // レスポンスのステータスコードをログ出力
+    console.log('Response Body:', body); // レスポンスボディをログ出力
+
+    if (response.statusCode >= 400) {
+      // 別のAPIからエラーが返ってきた場合
+      return res
+        .status(response.statusCode)
+        .json({ message: "API request failed", details: body });
+    }
+
+    // 成功した場合
+    res.set("Access-Control-Allow-Origin", "*");
+    res.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.set(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept, x-cybozu-api-token"
+    );
+    res.json(body);
   });
 });
 
 
 // サーバーを起動
-const port = process.env.PORT || 3000;
+const port = 3002;
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
