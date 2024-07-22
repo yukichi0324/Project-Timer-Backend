@@ -15,6 +15,10 @@ app.use(express.json());
 // プレフライトリクエストの明示的な処理
 app.options('/api/data', cors()); // プレフライトリクエストを明示的に処理
 
+app.get('/', (req, res) => {
+  res.send('Server is up and running');
+});
+
 // APIエンドポイントの設定
 app.post("/api/data", (req, res) => {
   const url = "https://jdg50gqzyue2.cybozu.com/k/v1/record.json";
